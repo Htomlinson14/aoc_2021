@@ -9,12 +9,24 @@ main = do
 
 playBingo :: [Int] -> [[[Int]]] -> Int
 playBingo [] _ = error "No board won the game"
-playBingo (x:xs) boards =
+playBingo x boards 
+    | length boards == 1 = scoreBingo x boards
+    | otherwise = filterBingo x boards
+
+filterBingo :: [Int] -> [[[Int]]] -> Int
+filterBingo [] _ = error "No board won the game"
+filterBingo (x:xs) boards  = 
+    let boardsnew = filter (not . getSuccess) $ removeNumber x boards in
+        playBingo xs boardsnew
+        
+scoreBingo :: [Int] -> [[[Int]]] -> Int
+scoreBingo [] _ = error "No board won the game"
+scoreBingo (x:xs) boards =
     let boardsnew = removeNumber x boards
-        y = filter getSuccess boardsnew in
-        if null y 
-            then playBingo xs boardsnew
-            else sum (map (sum . filter (>0)) $ head y) * x
+        success = getSuccess $ head boardsnew in 
+            if success 
+                then sum (map (sum . filter (>0)) $ head boardsnew) * x
+                else scoreBingo xs boardsnew
 
 getSuccess :: [[Int]] -> Bool
 getSuccess x = getSuccess' x || getSuccess' (transpose x)
