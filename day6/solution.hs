@@ -13,7 +13,7 @@ simulateFish days fishcounts = simulateFish (days - 1) (spawnNew fishcounts)
 spawnNew :: [Int] -> [Int]
 spawnNew fishcounts =
     let x = take 7 fishcounts in 
-        tail x ++ [head x + fishcounts!!7] ++ [fishcounts!!8] ++ [head x]
+        tail x ++ [head x + fishcounts!!7, fishcounts!!8, head x]
 
 getCounts :: [Int] -> [Int]
 getCounts x = map (getCounts' x) [0..8]
